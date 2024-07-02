@@ -55,6 +55,9 @@ function displayBooks(book) {
         bookCard.classList.add("card");
         bookCard.textContent = `${book.title} by ${book.author}`;
         container.appendChild(bookCard);
+
+        let index = bookArray.indexOf(book);
+        bookCard.dataset.key = index;
     }
 }
 
