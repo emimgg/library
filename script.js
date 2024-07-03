@@ -31,13 +31,23 @@ addBookBtn.addEventListener("click", () => {
 
 container.addEventListener("click", (event) => {
     if (event.target.classList.contains("remove")) {
-        let key = event.target.dataset.key;
-        removeFromDisplay(key);
+        let index = event.target.dataset.key;
+        removeFromDisplay(index);
     }
 });
 
-function removeFromDisplay(key) {
-    bookArray.splice(key, 1);
+container.addEventListener("click", (event) => {
+    if (event.target.classList.contains("toggle")) {
+        let index = event.target.dataset.key;
+        bookArray[index].toggleReadStatus();
+        checkReadStatus(index);
+    }
+});
+
+
+
+function removeFromDisplay(index) {
+    bookArray.splice(index, 1);
     displayBooks();
 }
 
@@ -90,12 +100,27 @@ function addRemoveBtn(card) {
 let toggleReadBtn;
 function addToggleReadBtn(card) {
     toggleReadBtn = document.createElement("button");
-    toggleReadBtn.classList.add("toggle");
-    toggleReadBtn.textContent = "READ";
     toggleReadBtn.dataset.key = card.dataset.key;
+    checkReadStatus(card.dataset.key);
     card.appendChild(toggleReadBtn);
 }
 
+function checkReadStatus(index) {
+    clearClasses(toggleReadBtn);
+    if (bookArray[index].isRead === true) {
+        toggleReadBtn.classList.add("toggle");
+        toggleReadBtn.classList.add("read");
+        toggleReadBtn.textContent = "READ";
+    } else {
+        toggleReadBtn.classList.add("toggle");
+        toggleReadBtn.classList.add("not-read");
+        toggleReadBtn.textContent = "Not read.";
+    }
+}
+
+function clearClasses(element) {
+    element.classList.remove(...element.classList);
+}
 // const book1 = new Book("Lord of the Rings: The fellowship of The Ring", "JRR Tolkien", "536", "not yet")
 
 // book1.addBookToArray();
