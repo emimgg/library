@@ -25,17 +25,28 @@ bookForm.addEventListener("submit", (event) => {
     clearInput();
 });
 
+addBookBtn.addEventListener("click", () => {
+    dialog.showModal();
+})
+
+container.addEventListener("click", (event) => {
+    if (event.target.classList.contains("remove")) {
+        let key = event.target.dataset.key;
+        removeFromDisplay(key);
+    }
+});
+
+function removeFromDisplay(key) {
+    bookArray.splice(key, 1);
+    displayBooks();
+}
+
 function clearInput() {
     bookTitle.value= "";
     bookAuthor.value= "";
     bookPages.value= "";
     bookIsRead.value= "";
 }
-
-addBookBtn.addEventListener("click", () => {
-    dialog.showModal();
-})
-
 
 function Book(title, author, pages, isRead) {
     this.title = title;
@@ -58,9 +69,17 @@ function displayBooks(book) {
 
         let index = bookArray.indexOf(book);
         bookCard.dataset.key = index;
+        addRemoveBtn(bookCard);
     }
 }
-
+let removeBtn ;
+function addRemoveBtn(card) {
+    removeBtn = document.createElement("button");
+    removeBtn.classList.add("remove");
+    removeBtn.textContent = "Remove";
+    removeBtn.dataset.key = card.dataset.key;
+    card.appendChild(removeBtn);
+}
 
 // const book1 = new Book("Lord of the Rings: The fellowship of The Ring", "JRR Tolkien", "536", "not yet")
 
