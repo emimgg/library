@@ -16,7 +16,7 @@ bookForm.addEventListener("submit", (event) => {
     let title = bookTitle.value;
     let author = bookAuthor.value;
     let pages = bookPages.value;
-    let isRead = bookIsRead.value;
+    let isRead = bookIsRead.checked;
 
     let book = new Book(title, author, pages, isRead);
     book.addBookToArray();
@@ -59,6 +59,11 @@ Book.prototype.addBookToArray = function() {
     bookArray.push(this)
 }
 
+Book.prototype.toggleReadStatus = function() {
+    this.isRead = !this.isRead;
+}
+
+
 function displayBooks(book) {
     container.innerHTML = "";
     for (let book of bookArray) {
@@ -70,6 +75,7 @@ function displayBooks(book) {
         let index = bookArray.indexOf(book);
         bookCard.dataset.key = index;
         addRemoveBtn(bookCard);
+        addToggleReadBtn(bookCard);
     }
 }
 let removeBtn ;
@@ -79,6 +85,15 @@ function addRemoveBtn(card) {
     removeBtn.textContent = "Remove";
     removeBtn.dataset.key = card.dataset.key;
     card.appendChild(removeBtn);
+}
+
+let toggleReadBtn;
+function addToggleReadBtn(card) {
+    toggleReadBtn = document.createElement("button");
+    toggleReadBtn.classList.add("toggle");
+    toggleReadBtn.textContent = "READ";
+    toggleReadBtn.dataset.key = card.dataset.key;
+    card.appendChild(toggleReadBtn);
 }
 
 // const book1 = new Book("Lord of the Rings: The fellowship of The Ring", "JRR Tolkien", "536", "not yet")
