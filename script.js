@@ -20,7 +20,7 @@ bookForm.addEventListener("submit", (event) => {
 
     let book = new Book(title, author, pages, isRead);
     book.addBookToArray();
-    displayBooks();
+    book.displayBook();
     dialog.close();
     clearInput();
 });
@@ -58,11 +58,12 @@ function clearInput() {
     bookIsRead.value= "";
 }
 
-function Book(title, author, pages, isRead) {
+function Book(title, author, pages, isRead, color) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.isRead = isRead;
+    this.color = color;
 }
 
 Book.prototype.addBookToArray = function() {
@@ -74,22 +75,21 @@ Book.prototype.toggleReadStatus = function() {
 }
 
 
-function displayBooks(book) {
-    container.innerHTML = "";
-    for (let book of bookArray) {
+Book.prototype.displayBook = function(index){
         const bookCard = document.createElement("article");
         bookCard.classList.add("card");
-        bookCard.textContent = `${book.title} by ${book.author}`;
+        bookCard.style.textAlign = "center";
+        
+        bookCard.textContent = `${this.title}\nby ${this.author}`;
         container.appendChild(bookCard);
 
-        let index = bookArray.indexOf(book);
         bookCard.dataset.key = index;
-        addRemoveBtn(bookCard);
-        addToggleReadBtn(bookCard);
+        this.addRemoveBtn(bookCard);
+        this.addToggleReadBtn(bookCard);
     }
-}
-let removeBtn ;
-function addRemoveBtn(card) {
+
+Book.prototype.addRemoveBtn = function(card) {
+    let removeBtn;
     removeBtn = document.createElement("button");
     removeBtn.classList.add("remove");
     removeBtn.textContent = "Remove";
@@ -98,16 +98,17 @@ function addRemoveBtn(card) {
 }
 
 let toggleReadBtn;
-function addToggleReadBtn(card) {
+Book.prototype.addToggleReadBtn = function(card) {
     toggleReadBtn = document.createElement("button");
     toggleReadBtn.dataset.key = card.dataset.key;
-    checkReadStatus(card.dataset.key);
+    this.checkReadStatus();
     card.appendChild(toggleReadBtn);
 }
 
-function checkReadStatus(index) {
+
+Book.prototype.checkReadStatus = function(){
     clearClasses(toggleReadBtn);
-    if (bookArray[index].isRead === true) {
+    if (this.isRead === true) {
         toggleReadBtn.classList.add("toggle");
         toggleReadBtn.classList.add("read");
         toggleReadBtn.textContent = "READ";
@@ -121,8 +122,5 @@ function checkReadStatus(index) {
 function clearClasses(element) {
     element.classList.remove(...element.classList);
 }
-// const book1 = new Book("Lord of the Rings: The fellowship of The Ring", "JRR Tolkien", "536", "not yet")
 
-// book1.addBookToArray();
-// console.log(bookArray);
-// displayBook();
+
