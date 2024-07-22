@@ -9,6 +9,12 @@
     margin: 0;
 }
 
+:root {
+    --main-color: rgb(155, 129, 100);
+    --accent-color: rgb(43, 55, 77);
+    --bg-color: #e4c19d;
+}
+
 html, body {
     height: 100%;
     font-family: "roboto-regular";
@@ -24,8 +30,23 @@ header {
     display: flex;
     justify-content: space-around;
     padding: 16px;
-    background-color: white;
-    box-shadow: 0px 2px 4px -2px rgb(196, 196, 196);
+    background-color: var(--main-color);
+    border-bottom: 1px solid gainsboro;
+    box-shadow: 1px 2px 4px -2px rgb(131, 131, 131);
+}
+
+header h1 {
+    color: white;
+    font-weight: bold;
+    font-size: 3rem;
+}
+
+#add-new {
+    background-color: black;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 35px;
 }
 
 main {
@@ -34,28 +55,45 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color:var(--bg-color);
 }
 
 .books {
     width: 70%;
     height: min-content;
-    background-color: bisque;
     display: grid;
     grid-template-columns: repeat(auto-fill, 200px);
     grid-auto-rows: 300px;
     place-content: center;
-    gap: 32px;
+    column-gap: 32px;
+    row-gap: 64px;
     padding: 64px 32px;
 }
 
 .card {
-    background-color: aliceblue;
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
-    text-align: center;
+    justify-content: center;
+    flex-direction: column;
     position: relative;
+    border: 1px solid black;
+    padding: 6px;
+}
+
+.title {
+    font-size: 30px;
+    font-style: italic;
+}
+
+.author {
+    margin-top: 25%;
+    font-size: 18px;
+}
+
+.pages {
+    font-size: 14px;
 }
 
 .remove {
@@ -63,7 +101,7 @@ main {
     width: 35%;
     font-size: 16px;
     border: none;
-    box-shadow: 0px 1px 4px 1px rgb(212, 212, 212);
+    box-shadow: 0px 1px 10px 1px rgb(0, 0, 0, 0.2);
     color: white;
     background-color: rgb(255, 0, 0, 0.7);
     font-weight: bold;
@@ -76,14 +114,13 @@ main {
     align-items: center;
 }
 
-.toggle {
+.read, .not-read {
     height: 10px;
     width: 100%;
     font-size: 16px;
     border: none;
-    box-shadow: 0px 1px 4px 1px rgb(212, 212, 212);
+    box-shadow: 0px 1px 10px 1px rgb(0, 0, 0, 0.2);
     color: white;
-    background-color: rgba(0, 255, 34, 0.7);
     font-weight: bold;
     position: absolute;
     bottom: -15%;
@@ -92,6 +129,16 @@ main {
     justify-content: center;
     align-items: center;
 }
+
+.read {
+    background-color: rgba(0, 255, 34, 0.7);
+}
+
+.not-read {
+    background-color: rgba(250, 172, 26, 0.7);
+}
+
+
 
 dialog {
     margin: auto;
