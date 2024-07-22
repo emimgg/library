@@ -42,7 +42,7 @@ container.addEventListener("click", (event) => {
     if (event.target.classList.contains("toggle")) {
         let index = event.target.dataset.key;
         bookArray[index].toggleReadStatus();
-        checkReadStatus(index);
+        bookArray[index].checkReadStatus();
     }
 });
 
@@ -60,7 +60,7 @@ function clearInput() {
     bookTitle.value = "";
     bookAuthor.value = "";
     bookPages.value = "";
-    bookIsRead.value = "";
+    bookIsRead.checked = false;
     bookColor.value = "";
 }
 
@@ -104,28 +104,24 @@ Book.prototype.addRemoveBtn = function(card) {
     card.appendChild(removeBtn);
 }
 
-let toggleReadBtn;
 Book.prototype.addToggleReadBtn = function(card) {
-    toggleReadBtn = document.createElement("button");
+    let toggleReadBtn = document.createElement("button");
+    toggleReadBtn.classList.add("toggle");
     toggleReadBtn.dataset.key = card.dataset.key;
-    this.checkReadStatus();
     card.appendChild(toggleReadBtn);
+    this.toggleReadBtn = toggleReadBtn;
+    this.checkReadStatus();
 }
 
 
 Book.prototype.checkReadStatus = function(){
-    clearClasses(toggleReadBtn);
+    this.toggleReadBtn.classList.remove("read", "not-read");
     if (this.isRead === true) {
-        toggleReadBtn.classList.add("toggle");
-        toggleReadBtn.classList.add("read");
-        toggleReadBtn.textContent = "READ";
+        this.toggleReadBtn.classList.add("read");
+        this.toggleReadBtn.textContent = "READ"; 
     } else {
-        toggleReadBtn.classList.add("toggle");
-        toggleReadBtn.classList.add("not-read");
-        toggleReadBtn.textContent = "Not read.";
+        this.toggleReadBtn.classList.add("not-read");
+        this.toggleReadBtn.textContent = "Not read"; 
     }
 }
 
-function clearClasses(element) {
-    element.classList.remove(...element.classList);
-}
