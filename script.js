@@ -7,6 +7,7 @@ const bookTitle = document.querySelector("#title");
 const bookAuthor = document.querySelector("#author");
 const bookPages = document.querySelector("#pages");
 const bookIsRead = document.querySelector("#is-read");
+const bookColor = document.querySelector("#color")
 
 const bookForm = document.querySelector("form");
 
@@ -17,8 +18,9 @@ bookForm.addEventListener("submit", (event) => {
     let author = bookAuthor.value;
     let pages = bookPages.value;
     let isRead = bookIsRead.checked;
+    let color = bookColor.value;
 
-    let book = new Book(title, author, pages, isRead);
+    let book = new Book(title, author, pages, isRead, color);
     book.addBookToArray();
     book.displayBook();
     dialog.close();
@@ -32,7 +34,7 @@ addBookBtn.addEventListener("click", () => {
 container.addEventListener("click", (event) => {
     if (event.target.classList.contains("remove")) {
         let index = event.target.dataset.key;
-        removeFromDisplay(index);
+        bookArray[index].removeFromDisplay(); 
     }
 });
 
@@ -44,12 +46,15 @@ container.addEventListener("click", (event) => {
     }
 });
 
-
-
-function removeFromDisplay(index) {
-    bookArray.splice(index, 1);
-    displayBooks();
+Book.prototype.removeFromDisplay = function(book) {
+    let index = bookArray.indexOf(this);
+    if (index !== -1) {
+        bookArray.splice(index, 1);
+        container.innerHTML = "";
+        bookArray.forEach(book => book.displayBook());
+    }
 }
+
 
 function clearInput() {
     bookTitle.value= "";
@@ -75,15 +80,16 @@ Book.prototype.toggleReadStatus = function() {
 }
 
 
-Book.prototype.displayBook = function(index){
+Book.prototype.displayBook = function(){
         const bookCard = document.createElement("article");
         bookCard.classList.add("card");
         bookCard.style.textAlign = "center";
+        bookCard.style.backgroundColor = color;
         
         bookCard.textContent = `${this.title}\nby ${this.author}`;
         container.appendChild(bookCard);
 
-        bookCard.dataset.key = index;
+        bookCard.dataset.key = bookArray.indexOf(this);
         this.addRemoveBtn(bookCard);
         this.addToggleReadBtn(bookCard);
     }
@@ -122,5 +128,3 @@ Book.prototype.checkReadStatus = function(){
 function clearClasses(element) {
     element.classList.remove(...element.classList);
 }
-
-
