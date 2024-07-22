@@ -86,14 +86,27 @@ Book.prototype.displayBook = function(){
         bookCard.classList.add("card");
         bookCard.style.textAlign = "center";
         bookCard.style.backgroundColor = this.color;
-        
-        bookCard.textContent = `${this.title}\nby ${this.author}`;
         container.appendChild(bookCard);
+        
+        const displayTitle = document.createElement("h3");
+        displayTitle.classList.add("title");
+        displayTitle.textContent = `${this.title}`;
+        bookCard.appendChild(displayTitle);
+
+        const displayAuthor = document.createElement("span");
+        displayAuthor.classList.add("author");
+        displayAuthor.textContent = `${this.author}`
+        bookCard.appendChild(displayAuthor);
+
+        const displayPages = document.createElement("span");
+        displayPages.classList.add("pages");
+        displayPages.textContent = `${this.pages} pages`;
+        bookCard.appendChild(displayPages);
 
         bookCard.dataset.key = bookArray.indexOf(this);
         this.addRemoveBtn(bookCard);
         this.addToggleReadBtn(bookCard);
-    }
+}
 
 Book.prototype.addRemoveBtn = function(card) {
     let removeBtn;
