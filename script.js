@@ -57,10 +57,11 @@ Book.prototype.removeFromDisplay = function(book) {
 
 
 function clearInput() {
-    bookTitle.value= "";
-    bookAuthor.value= "";
-    bookPages.value= "";
-    bookIsRead.value= "";
+    bookTitle.value = "";
+    bookAuthor.value = "";
+    bookPages.value = "";
+    bookIsRead.value = "";
+    bookColor.value = "";
 }
 
 function Book(title, author, pages, isRead, color) {
@@ -84,7 +85,7 @@ Book.prototype.displayBook = function(){
         const bookCard = document.createElement("article");
         bookCard.classList.add("card");
         bookCard.style.textAlign = "center";
-        bookCard.style.backgroundColor = color;
+        bookCard.style.backgroundColor = this.color;
         
         bookCard.textContent = `${this.title}\nby ${this.author}`;
         container.appendChild(bookCard);
