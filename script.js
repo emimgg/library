@@ -1,44 +1,57 @@
+const UI = (() => {
+    const container = document.querySelector(".books");
+    const addBookBtn = document.querySelector("#add-new");
+    const dialog = document.querySelector("dialog");
+    const bookTitle = document.querySelector("#title");
+    const bookAuthor = document.querySelector("#author");
+    const bookPages = document.querySelector("#pages");
+    const bookIsRead = document.querySelector("#is-read");
+    const bookColor = document.querySelector("#color")
+    const bookForm = document.querySelector("form");
+
+    return {
+        container,
+        addBookBtn,
+        dialog,
+        bookTitle,
+        bookAuthor,
+        bookPages,
+        bookIsRead,
+        bookColor,
+        bookForm
+    };
+})();
+
 const bookArray = [];
 
-const container = document.querySelector(".books");
-const addBookBtn = document.querySelector("#add-new");
-const dialog = document.querySelector("dialog");
-const bookTitle = document.querySelector("#title");
-const bookAuthor = document.querySelector("#author");
-const bookPages = document.querySelector("#pages");
-const bookIsRead = document.querySelector("#is-read");
-const bookColor = document.querySelector("#color")
+UI.addBookBtn.addEventListener("click", () => {
+    UI.dialog.showModal();
+});
 
-const bookForm = document.querySelector("form");
-
-bookForm.addEventListener("submit", (event) => {
+UI.bookForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    let title = bookTitle.value;
-    let author = bookAuthor.value;
-    let pages = bookPages.value;
-    let isRead = bookIsRead.checked;
-    let color = bookColor.value;
+    let title = UI.bookTitle.value;
+    let author = UI.bookAuthor.value;
+    let pages = UI.bookPages.value;
+    let isRead = UI.bookIsRead.checked;
+    let color = UI.bookColor.value;
 
     let book = new Book(title, author, pages, isRead, color);
     book.addBookToArray();
     book.displayBook();
-    dialog.close();
+    UI.dialog.close();
     clearInput();
 });
 
-addBookBtn.addEventListener("click", () => {
-    dialog.showModal();
-})
-
-container.addEventListener("click", (event) => {
+UI.container.addEventListener("click", (event) => {
     if (event.target.classList.contains("remove")) {
         let index = event.target.dataset.key;
         bookArray[index].removeFromDisplay(); 
     }
 });
 
-container.addEventListener("click", (event) => {
+UI.container.addEventListener("click", (event) => {
     if (event.target.classList.contains("toggle")) {
         let index = event.target.dataset.key;
         bookArray[index].toggleReadStatus();
@@ -46,47 +59,29 @@ container.addEventListener("click", (event) => {
     }
 });
 
-Book.prototype.removeFromDisplay = function(book) {
-    let index = bookArray.indexOf(this);
-    if (index !== -1) {
-        bookArray.splice(index, 1);
-        container.innerHTML = "";
-        bookArray.forEach(book => book.displayBook());
+class Book {
+    constructor(title, author, pages, isRead, color) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.isRead = isRead;
+        this.color = color;
     }
-}
 
+    addBookToArray() {
+        bookArray.push(this);
+    }
 
-function clearInput() {
-    bookTitle.value = "";
-    bookAuthor.value = "";
-    bookPages.value = "";
-    bookIsRead.checked = false;
-    bookColor.value = "";
-}
+    toggleReadStatus() {
+        this.isRead = !this.isRead;
+    }
 
-function Book(title, author, pages, isRead, color) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.isRead = isRead;
-    this.color = color;
-}
-
-Book.prototype.addBookToArray = function() {
-    bookArray.push(this)
-}
-
-Book.prototype.toggleReadStatus = function() {
-    this.isRead = !this.isRead;
-}
-
-
-Book.prototype.displayBook = function(){
+    displayBook() {
         const bookCard = document.createElement("article");
         bookCard.classList.add("card");
         bookCard.style.textAlign = "center";
         bookCard.style.backgroundColor = this.color;
-        container.appendChild(bookCard);
+        UI.container.appendChild(bookCard);
         
         const displayTitle = document.createElement("h3");
         displayTitle.classList.add("title");
@@ -106,35 +101,50 @@ Book.prototype.displayBook = function(){
         bookCard.dataset.key = bookArray.indexOf(this);
         this.addRemoveBtn(bookCard);
         this.addToggleReadBtn(bookCard);
-}
+    }
 
-Book.prototype.addRemoveBtn = function(card) {
-    let removeBtn;
-    removeBtn = document.createElement("button");
-    removeBtn.classList.add("remove");
-    removeBtn.textContent = "Remove";
-    removeBtn.dataset.key = card.dataset.key;
-    card.appendChild(removeBtn);
-}
+    addRemoveBtn(card) {
+        const removeBtn = document.createElement("button");
+        removeBtn.classList.add("remove");
+        removeBtn.textContent = "Remove";
+        removeBtn.dataset.key = card.dataset.key;
+        card.appendChild(removeBtn);
+    }
 
-Book.prototype.addToggleReadBtn = function(card) {
-    let toggleReadBtn = document.createElement("button");
-    toggleReadBtn.classList.add("toggle");
-    toggleReadBtn.dataset.key = card.dataset.key;
-    card.appendChild(toggleReadBtn);
-    this.toggleReadBtn = toggleReadBtn;
-    this.checkReadStatus();
-}
+    addToggleReadBtn(card) {
+        const toggleReadBtn = document.createElement("button");
+        toggleReadBtn.classList.add("toggle");
+        toggleReadBtn.dataset.key = card.dataset.key;
+        card.appendChild(toggleReadBtn);
+        this.toggleReadBtn = toggleReadBtn;
+        this.checkReadStatus();
+    }
 
+    checkReadStatus() {
+        this.toggleReadBtn.classList.remove("read", "not-read");
+        if (this.isRead === true) {
+            this.toggleReadBtn.classList.add("read");
+            this.toggleReadBtn.textContent = "READ"; 
+        } else {
+            this.toggleReadBtn.classList.add("not-read");
+            this.toggleReadBtn.textContent = "Not read"; 
+        }    
+    }
 
-Book.prototype.checkReadStatus = function(){
-    this.toggleReadBtn.classList.remove("read", "not-read");
-    if (this.isRead === true) {
-        this.toggleReadBtn.classList.add("read");
-        this.toggleReadBtn.textContent = "READ"; 
-    } else {
-        this.toggleReadBtn.classList.add("not-read");
-        this.toggleReadBtn.textContent = "Not read"; 
+    removeFromDisplay() {
+        let index = bookArray.indexOf(this);
+        if (index !== -1) {
+            bookArray.splice(index, 1);
+            UI.container.innerHTML = "";
+            bookArray.forEach(book => book.displayBook());
+        }
     }
 }
 
+function clearInput() {
+    UI.bookTitle.value = "";
+    UI.bookAuthor.value = "";
+    UI.bookPages.value = "";
+    UI.bookIsRead.checked = false;
+    UI.bookColor.value = "";
+}
